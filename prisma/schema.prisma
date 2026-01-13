@@ -1,0 +1,106 @@
+// 1. USER & AUTH MANAGEMENT
+
+model User {
+    id        Int      @id @default(autoincrement())
+    email     String   @unique
+    password  String
+    fullName  String?
+    avatar    String?
+    role      Role     @default(USER)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    wishlist Wishlist[]
+}
+
+enum Role {
+    USER
+    ADMIN
+}
+
+// 2. PRODUCT MANAGEMENT
+model Product {
+    id          Int     @id @default(autoincrement())
+    name        String
+    description String?
+    price       BigInt
+
+    productLink String @map("product_link")
+
+    imageUrl String @map("image_url")
+
+    isActive  Boolean  @default(true)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    tags      ProductTag[]
+    wishlists Wishlist[]
+}
+
+// 3. CORE LOGIC: TAG SYSTEM
+model Tag {
+    id   Int     @id @default(autoincrement())
+    name String
+    slug String  @unique
+    type TagType
+
+    products    ProductTag[]
+    quizOptions QuizOptionTag[]
+}
+
+enum TagType {
+    RELATIONSHIP
+    OCCASION
+    BUDGET
+    INTEREST
+}
+
+model ProductTag {
+    productId Int
+    tagId     Int
+    product   Product @relation(fields: [productId], references: [id])
+    tag       Tag     @relation(fields: [tagId], references: [id])
+
+    @@id([productId, tagId])
+}
+
+// 4. RECOMMENDATION FLOW 
+model QuizQuestion {
+    id         Int     @id @default(autoincrement())
+    question   String
+    orderIndex Int
+    isActive   Boolean @default(true)
+
+    options QuizOption[]
+}
+
+model QuizOption {
+    id         Int          @id @default(autoincrement())
+    text       String
+    iconUrl    String?
+    questionId Int
+    question   QuizQuestion @relation(fields: [questionId], references: [id])
+
+    tags QuizOptionTag[]
+}
+
+model QuizOptionTag {
+    optionId Int
+    tagId    Int
+    option   QuizOption @relation(fields: [optionId], references: [id])
+    tag      Tag        @relation(fields: [tagId], references: [id])
+
+    @@id([optionId, tagId])
+}
+
+// 5. USER INTERACTION
+model Wishlist {
+    id        Int      @id @default(autoincrement())
+    userId    Int
+    productId Int
+    user      User     @relation(fields: [userId], references: [id])
+    product   Product  @relation(fields: [productId], references: [id])
+    createdAt DateTime @default(now())
+
+    @@unique([userId, productId])
+}
