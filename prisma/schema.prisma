@@ -1,5 +1,13 @@
-// 1. USER & AUTH MANAGEMENT
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
 
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 1. USER & AUTH MANAGEMENT
 model User {
     id        Int      @id @default(autoincrement())
     email     String   @unique

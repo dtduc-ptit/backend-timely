@@ -3,8 +3,9 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'prisma/prisma.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { User } from '@prisma/client';
 import bcrypt from 'bcrypt';
+import { UserResponseDto } from './dto/authResponse.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +14,9 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(dto: RegisterDto): Promise<{ user: User; token: string }> {
+  async register(
+    dto: RegisterDto,
+  ): Promise<{ user: UserResponseDto; token: string }> {
     const hashed = await bcrypt.hash(dto.password, 10);
 
     const user = await this.prisma.user.create({
@@ -21,15 +24,23 @@ export class AuthService {
         email: dto.email,
         password: hashed,
         name: dto.name,
+        role: dto.role ?? 'USER',
       },
     });
 
     const token = this.signToken(user.id);
 
-    return { user: user, token };
+    return {
+      user: plainToInstance(UserResponseDto, user, {
+        excludeExtraneousValues: true,
+      }),
+      token,
+    };
   }
 
-  async login(dto: LoginDto): Promise<{ user: User; token: string }> {
+  async login(
+    dto: LoginDto,
+  ): Promise<{ user: UserResponseDto; token: string }> {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -45,7 +56,12 @@ export class AuthService {
 
     const token = this.signToken(user.id);
 
-    return { user: user, token };
+    return {
+      user: plainToInstance(UserResponseDto, user, {
+        excludeExtraneousValues: true,
+      }),
+      token,
+    };
   }
 
   signToken(userId: number): string {

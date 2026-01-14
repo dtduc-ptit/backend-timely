@@ -1,23 +1,26 @@
-# 1. Base image
-FROM node:18-alpine
+FROM node:18-alpine AS builder
 
-# 2. Set working directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# 3. Copy package
 COPY package*.json ./
+RUN npm ci
 
-# 4. Install deps
-RUN npm install
-
-# 5. Copy source
 COPY . .
 
-# 6. Build TS
 RUN npm run build
 
-# 7. Expose port
+
+FROM node:18-alpine
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma ./prisma
+COPY package*.json ./
+
 EXPOSE 3000
 
-# 8. Run app
 CMD ["node", "dist/main.js"]
