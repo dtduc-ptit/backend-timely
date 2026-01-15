@@ -4,6 +4,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { PrismaService } from 'prisma/prisma.service';
 import { AuthController } from './modules/auth/auth.controller';
 import { AuthService } from './modules/auth/auth.service';
+import { EventsController } from './modules/events/events.controller';
+import { EventsService } from './modules/events/events.service';
 
 @Module({
   imports: [
@@ -22,8 +24,8 @@ import { AuthService } from './modules/auth/auth.service';
     }),
   ],
 
-  providers: [PrismaService, AuthService],
-  controllers: [AuthController],
-  exports: [PrismaService, AuthService],
+  providers: [PrismaService, AuthService, EventsService],
+  controllers: [AuthController, EventsController, EventsController],
+  exports: [PrismaService, AuthService, EventsService],
 })
 export class AppModule {}
