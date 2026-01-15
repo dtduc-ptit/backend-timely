@@ -6,6 +6,9 @@ import { AuthController } from './modules/auth/auth.controller';
 import { AuthService } from './modules/auth/auth.service';
 import { EventsController } from './modules/events/events.controller';
 import { EventsService } from './modules/events/events.service';
+import { UsersController } from './modules/users/users.controller';
+import { AdminUsersController } from './modules/users/admin-users.controller';
+import { UsersService } from './modules/users/users.service';
 
 @Module({
   imports: [
@@ -24,8 +27,14 @@ import { EventsService } from './modules/events/events.service';
     }),
   ],
 
-  providers: [PrismaService, AuthService, EventsService],
-  controllers: [AuthController, EventsController, EventsController],
-  exports: [PrismaService, AuthService, EventsService],
+  providers: [PrismaService, AuthService, EventsService, UsersService],
+  controllers: [
+    AuthController,
+    EventsController,
+    EventsController,
+    UsersController,
+    AdminUsersController,
+  ],
+  exports: [PrismaService, AuthService, EventsService, UsersService],
 })
 export class AppModule {}
