@@ -6,9 +6,9 @@ import { AuthController } from './modules/auth/auth.controller';
 import { AuthService } from './modules/auth/auth.service';
 import { EventsController } from './modules/events/events.controller';
 import { EventsService } from './modules/events/events.service';
+import { UsersService } from './modules/users/users.service';
 import { UsersController } from './modules/users/users.controller';
 import { AdminUsersController } from './modules/users/admin-users.controller';
-import { UsersService } from './modules/users/users.service';
 
 @Module({
   imports: [

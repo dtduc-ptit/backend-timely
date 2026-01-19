@@ -140,14 +140,19 @@ model EventCategory {
     events Event[]
 }
 
-model Reminder {
-    id         Int     @id @default(autoincrement())
-    daysBefore Int // 1, 3, 7, 30
-    time       String // "09:00"
-    isActive   Boolean @default(true)
 
-    eventId Int
-    event   Event @relation(fields: [eventId], references: [id])
+model Reminder {
+  id            String   @id @default(uuid())
+  eventId       String
+  remindAt      DateTime
+  channel       ReminderChannel @default(IN_APP)
+  status        ReminderStatus  @default(PENDING)
+  isActive      Boolean  @default(true)
+
+  event         Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  sentAt        DateTime?
+  createdAt     DateTime @default(now())
 }
 
 // enum
@@ -174,5 +179,17 @@ enum TargetType {
     GROUP
     WORK
     OTHER
+}
+
+enum ReminderStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+enum ReminderChannel {
+  IN_APP
+  EMAIL
+  PUSH
 }
 
