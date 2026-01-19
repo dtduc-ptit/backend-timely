@@ -32,33 +32,14 @@ import { RemindersController } from './modules/reminders/reminders.controller';
     }),
   ],
 
-<<<<<<< Updated upstream
-  providers: [PrismaService, AuthService, EventsService],
-  controllers: [AuthController, EventsController, EventsController],
-  exports: [PrismaService, AuthService, EventsService],
-=======
-  providers: [
-    PrismaService,
-    AuthService,
-    EventsService,
-    UsersService,
-    RemindersService,
-  ],
+  providers: [PrismaService, AuthService, EventsService, UsersService],
   controllers: [
     AuthController,
     EventsController,
     EventsController,
     UsersController,
     AdminUsersController,
-    RemindersController,
   ],
-  exports: [
-    PrismaService,
-    AuthService,
-    EventsService,
-    UsersService,
-    RemindersService,
-  ],
->>>>>>> Stashed changes
+  exports: [PrismaService, AuthService, EventsService, UsersService],
 })
 export class AppModule {}
