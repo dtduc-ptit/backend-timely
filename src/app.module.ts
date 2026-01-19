@@ -6,14 +6,9 @@ import { AuthController } from './modules/auth/auth.controller';
 import { AuthService } from './modules/auth/auth.service';
 import { EventsController } from './modules/events/events.controller';
 import { EventsService } from './modules/events/events.service';
-<<<<<<< Updated upstream
-=======
+import { UsersService } from './modules/users/users.service';
 import { UsersController } from './modules/users/users.controller';
 import { AdminUsersController } from './modules/users/admin-users.controller';
-import { UsersService } from './modules/users/users.service';
-import { RemindersService } from './modules/reminders/reminders.service';
-import { RemindersController } from './modules/reminders/reminders.controller';
->>>>>>> Stashed changes
 
 @Module({
   imports: [
