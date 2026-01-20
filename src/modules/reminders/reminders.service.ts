@@ -6,7 +6,7 @@ import { PrismaService } from 'prisma/prisma.service';
 export class RemindersService {
   constructor(private prisma: PrismaService) {}
 
-  async create(eventId: string, userId: string, dto: CreateReminderDto) {
+  async create(eventId: number, userId: number, dto: CreateReminderDto) {
     const event = await this.prisma.event.findUnique({
       where: { id: eventId },
     });
@@ -24,7 +24,7 @@ export class RemindersService {
     });
   }
 
-  async getByEvent(eventId: string, userId: string) {
+  async getByEvent(eventId: number, userId: number) {
     const event = await this.prisma.event.findUnique({
       where: { id: eventId },
       include: { reminders: true },
@@ -37,7 +37,7 @@ export class RemindersService {
     return event.reminders;
   }
 
-  async markAsSent(reminderId: string) {
+  async markAsSent(reminderId: number) {
     return this.prisma.reminder.update({
       where: { id: reminderId },
       data: {
