@@ -142,8 +142,8 @@ model EventCategory {
 
 
 model Reminder {
-  id            String   @id @default(uuid())
-  eventId       String
+  id            Int         @id @default(autoincrement())
+  eventId       Int
   remindAt      DateTime
   channel       ReminderChannel @default(IN_APP)
   status        ReminderStatus  @default(PENDING)
