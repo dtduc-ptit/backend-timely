@@ -13,7 +13,7 @@ export class RemindersController {
     @CurrentUser('id') userId: string,
     @Body() dto: CreateReminderDto,
   ) {
-    return this.remindersService.create(eventId, userId, dto);
+    return this.remindersService.create(Number(eventId), Number(userId), dto);
   }
 
   @Get()
@@ -21,6 +21,6 @@ export class RemindersController {
     @Param('eventId') eventId: string,
     @CurrentUser('id') userId: string,
   ) {
-    return this.remindersService.getByEvent(eventId, userId);
+    return this.remindersService.getByEvent(Number(eventId), Number(userId));
   }
 }

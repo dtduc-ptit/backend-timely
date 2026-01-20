@@ -8,20 +8,34 @@ export class EventsService {
   constructor(private prisma: PrismaService) {}
 
   async create(userId: number, dto: CreateEventDto) {
+    const startDate = new Date(dto.startDate);
+
     return this.prisma.event.create({
       data: {
         title: dto.title,
-        startDate: new Date(dto.startDate),
+        startDate,
         note: dto.note,
         userId,
         targetId: dto.targetId,
         categoryId: dto.categoryId,
-        reminders: dto.reminderDays
+
+        reminders: dto.reminderDays?.length
           ? {
-              create: dto.reminderDays.map((d) => ({
-                daysBefore: d,
-                time: '09:00',
-              })),
+              create: dto.reminderDays.map((daysBefore) => {
+                const remindAt = new Date(startDate);
+
+                remindAt.setDate(remindAt.getDate() - daysBefore);
+
+                // Set giờ 09:00
+                remindAt.setHours(9, 0, 0, 0);
+
+                return {
+                  remindAt,
+                  channel: 'IN_APP',
+                  status: 'PENDING',
+                  isActive: true,
+                };
+              }),
             }
           : undefined,
       },
