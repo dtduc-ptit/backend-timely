@@ -5,7 +5,12 @@ import { GlobalExceptionFilter } from 'src/common/filters/exception.filters';
 import { ResponseTransformInterceptor } from 'src/common/interceptors/response.interceptors';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger:
+      process.env.NODE_ENV === 'production'
+        ? ['error', 'warn']
+        : ['log', 'debug', 'error', 'warn', 'verbose'],
+  });
 
   app.enableCors({
     origin: '*',

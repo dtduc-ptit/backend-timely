@@ -16,8 +16,6 @@ export class EventsService {
         startDate,
         note: dto.note,
         userId,
-        targetId: dto.targetId,
-        categoryId: dto.categoryId,
 
         reminders: dto.reminderDays?.length
           ? {
@@ -40,8 +38,6 @@ export class EventsService {
           : undefined,
       },
       include: {
-        target: true,
-        category: true,
         reminders: true,
       },
     });
@@ -50,10 +46,6 @@ export class EventsService {
   async findAllByUser(userId: number) {
     const events = await this.prisma.event.findMany({
       where: { userId },
-      include: {
-        target: true,
-        category: true,
-      },
       orderBy: { startDate: 'asc' },
     });
 
@@ -68,8 +60,6 @@ export class EventsService {
     const event = await this.prisma.event.findUnique({
       where: { id: eventId },
       include: {
-        target: true,
-        category: true,
         reminders: true,
       },
     });
@@ -100,8 +90,6 @@ export class EventsService {
         title: dto.title,
         startDate: dto.startDate ? new Date(dto.startDate) : undefined,
         note: dto.note,
-        categoryId: dto.categoryId,
-        targetId: dto.targetId,
       },
     });
   }
