@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'prisma/prisma.service';
 import { RegisterDto } from './dto/register.dto';
@@ -56,6 +60,15 @@ export class AuthService {
       access_token,
       refresh_token,
     };
+  }
+
+  async getProfile(userId: number): Promise<User> {
+    const user = await this.prisma.user.findFirst({
+      where: { id: userId },
+    });
+
+    if (!user) throw new NotFoundException('Không tìm thấy người dùng');
+    return user;
   }
 
   async validateUserCredentials(loginDto: LoginDto): Promise<User> {
