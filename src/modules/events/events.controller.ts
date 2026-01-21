@@ -15,15 +15,16 @@ import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { RolesGuard } from 'src/common/guards/role.guards';
 import { Roles } from 'src/common/guards/roles.decorator';
+import { Role } from '@prisma/client';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles('USER')
+@Roles(Role.USER)
 @Controller('events')
 export class EventsController {
   constructor(private eventsService: EventsService) {}
 
   @Post()
-  create(@CurrentUser() userId: number, @Body() dto: CreateEventDto) {
+  create(@CurrentUser('id') userId: number, @Body() dto: CreateEventDto) {
     return this.eventsService.create(userId, dto);
   }
 

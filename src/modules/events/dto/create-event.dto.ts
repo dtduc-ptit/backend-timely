@@ -1,6 +1,5 @@
 import {
   IsDateString,
-  IsInt,
   IsOptional,
   IsString,
   IsArray,
@@ -12,12 +11,6 @@ export class CreateEventDto {
 
   @IsDateString()
   startDate: string;
-
-  @IsInt()
-  categoryId: number;
-
-  @IsInt()
-  targetId: number;
 
   @IsOptional()
   @IsString()

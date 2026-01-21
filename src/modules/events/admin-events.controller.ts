@@ -15,8 +15,6 @@ export class AdminEventsController {
     return this.prisma.event.findMany({
       include: {
         user: true,
-        category: true,
-        target: true,
       },
     });
   }
@@ -24,11 +22,7 @@ export class AdminEventsController {
   @Get('stats')
   async stats() {
     const total = await this.prisma.event.count();
-    const byCategory = await this.prisma.event.groupBy({
-      by: ['categoryId'],
-      _count: true,
-    });
 
-    return { total, byCategory };
+    return { total };
   }
 }
