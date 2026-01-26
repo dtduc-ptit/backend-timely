@@ -23,7 +23,7 @@ export class AdminUsersController {
 
   @Put(':id/role')
   setRole(
-    @CurrentUser() adminId: number,
+    @CurrentUser('id') adminId: number,
     @Param('id') id: number,
     @Body('role') role: 'USER' | 'ADMIN',
   ) {
