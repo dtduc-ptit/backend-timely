@@ -90,16 +90,39 @@ model Wishlist {
 }
 
 model Event {
-  id         Int           @id @default(autoincrement())
+  id         Int         @id @default(autoincrement())
   title      String
   startDate  DateTime
-  isRepeat   Boolean       @default(false)
+  isRepeat   Boolean     @default(false)
   repeatType RepeatType?
   note       String?
   userId     Int
-  createdAt  DateTime      @default(now())
-  user       User          @relation(fields: [userId], references: [id])
+  createdAt  DateTime    @default(now())
+  user       User        @relation(fields: [userId], references: [id])
   reminders  Reminder[]
+}
+
+model GlobalEvent {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  eventDate   DateTime
+  isRecurring Boolean  @default(true)
+  categoryId  Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  reminders GlobalEventReminder[]
+}
+
+model GlobalEventReminder {
+  id            Int             @id @default(autoincrement())
+  globalEventId String
+  remindAt      DateTime
+  channel       ReminderChannel @default(IN_APP)
+  status        ReminderStatus  @default(PENDING)
+
+  globalEvent GlobalEvent @relation(fields: [globalEventId], references: [id], onDelete: Cascade)
 }
 
 model Reminder {
@@ -112,6 +135,29 @@ model Reminder {
   sentAt    DateTime?
   createdAt DateTime        @default(now())
   event     Event           @relation(fields: [eventId], references: [id], onDelete: Cascade)
+}
+
+model Broadcast {
+  id            Int             @id @default(autoincrement())
+  title         String
+  content       String
+  type          BroadcastType   @default(GENERAL) // MAINTENANCE, INFO, PROMOTION
+  channel       ReminderChannel @default(IN_APP)
+  targetUserIds String[]        @default([])
+  status        BroadcastStatus @default(PENDING)
+  createdAt     DateTime        @default(now())
+  sentAt        DateTime?
+}
+
+enum BroadcastType {
+  GENERAL
+  MAINTENANCE
+  PROMOTION
+}
+
+enum BroadcastStatus {
+  PENDING
+  SENT
 }
 
 enum Role {
