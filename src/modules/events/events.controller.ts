@@ -29,18 +29,18 @@ export class EventsController {
   }
 
   @Get()
-  findAll(@CurrentUser() userId: number) {
+  findAll(@CurrentUser('id') userId: number) {
     return this.eventsService.findAllByUser(userId);
   }
 
   @Get(':id')
-  findOne(@CurrentUser() userId: number, @Param('id') id: number) {
+  findOne(@CurrentUser('id') userId: number, @Param('id') id: number) {
     return this.eventsService.findOne(userId, +id);
   }
 
   @Put(':id')
   update(
-    @CurrentUser() userId: number,
+    @CurrentUser('id') userId: number,
     @Param('id') id: number,
     @Body() dto: UpdateEventDto,
   ) {
@@ -48,7 +48,7 @@ export class EventsController {
   }
 
   @Delete(':id')
-  remove(@CurrentUser() userId: number, @Param('id') id: number) {
+  remove(@CurrentUser('id') userId: number, @Param('id') id: number) {
     return this.eventsService.delete(userId, +id);
   }
 }
